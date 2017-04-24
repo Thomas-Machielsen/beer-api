@@ -9,7 +9,7 @@
     "build": "node --harmony app.js",
     "env": "env",
     "prebuild": "npm run lint",
-    "watch:js": "onchange '**/**/*.js' -- npm run build",
+    "watch:js": "onchange '**/**/*.js' -i -- npm run build",
     "watch": "npm run watch:js"
   },
   "license": "MIT",
@@ -21,7 +21,8 @@
     "express-session": "^1.10.1",
     "jsonwebtoken": "^7.2.1",
     "multer": "^0.1.6",
-    "mysql": "^2.5.4"
+    "mysql": "^2.13.0",
+    "sequelize": "^3.30.2"
   },
   "devDependencies": {
     "eslint": "^3.15.0",

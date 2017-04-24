@@ -2,12 +2,13 @@ const helpers = require('../utils/helpers');
 
 module.exports = new class BeersModel {
 
-
   getBeers(req) {
     return new Promise((resolve, reject) => {
       req.getConnection((error, connection) => {
-        connection.query('SELECT * FROM beers', (err, results) => {
-          if (results.length > 0) {
+        connection.query('SELECT AVG(ratings.rating) as stars, beers.name, beers.style, beers.id, beers.brewer from ratings RIGHT OUTER JOIN beers on ratings.beer_id = beers.id GROUP BY beers.id', (err, results) => {
+          if (err) {
+            reject(err);
+          } else if (results.length > 0) {
             resolve(results);
           } else if (results.length === 0) {
             reject('No beers found');
@@ -22,7 +23,7 @@ module.exports = new class BeersModel {
   singleBeer(req) {
     return new Promise((resolve, reject) => {
       req.getConnection((error, connection) => {
-        connection.query('SELECT * from beers WHERE id = ?', [req.params.id], (err, results) => {
+        connection.query('SELECT avg(ratings.rating) as stars, beers.name, beers.style, beers.brewer from ratings LEFT JOIN beers on ratings.beer_id = beers.id WHERE beers.id = ?', [req.params.id], (err, results) => {
           if (results.length > 0) {
             resolve(results);
           } else if (results.length === 0) {
@@ -52,19 +53,17 @@ module.exports = new class BeersModel {
   }
 
   editBeer(req) {
-    return new Promise(
-      (resolve, reject) => {
-        req.getConnection((error, connection) => {
-          connection.query('UPDATE beers SET style = ?, brewer = ?, name = ? WHERE id = ?', [req.body.style, req.body.brewer, req.body.name], (err, results) => {
-            if (results) {
-              resolve(results);
-            } else {
-              reject(err);
-            }
-          });
+    return new Promise((resolve, reject) => {
+      req.getConnection((error, connection) => {
+        connection.query('UPDATE beers SET style = ?, brewer = ?, name = ? WHERE id = ?', [req.body.style, req.body.brewer, req.body.name, req.params.id], (err, results) => {
+          if (results) {
+            resolve(results);
+          } else {
+            reject(err);
+          }
         });
-      }
-    );
+      });
+    });
   }
 
 

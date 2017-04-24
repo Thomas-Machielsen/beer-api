@@ -11,19 +11,17 @@ function getUsers(req, res) {
 
 function getToken(req, res) {
   UsersModel.getToken(req, res)
-  .then(results => res.json({ token: results }))
+  .then(results => res.json({ data: results }))
   .catch((err) => {
-    res.status(404);
-    res.json({ error: err });
+    res.json({ err });
   });
 }
 
 function authenticate(req, res, next) {
   UsersModel.authenticate(req, res, next)
-  .then(results => res.json({ token: results }))
+  .then(results => res.json({ data: results }))
   .catch((err) => {
-    res.status(404);
-    res.json({ error: err });
+    res.json({ data: err });
   });
 }
 
