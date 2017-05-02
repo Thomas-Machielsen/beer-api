@@ -1,7 +1,7 @@
 const BeersModel = require('./../models/beers');
 
 function showBeers(req, res) {
-  BeersModel.getBeers(req)
+  BeersModel.getBeers()
   .then(results => res.json({ data: results }))
   .catch((err) => {
     res.status(404);

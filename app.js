@@ -10,17 +10,6 @@ const Sequelize     = require('sequelize');
 
 const dbOptions     = config.config.dbOptions;
 
-// const sequelize = new Sequelize(dbOptions.database, dbOptions.user, dbOptions.password, {
-//   host: 'localhost',
-//   dialect: 'mysql',
-
-//   pool: {
-//     max: 5,
-//     min: 0,
-//     idle: 10000
-//   },
-// });
-
 
 app.set('superSecret', config.config.secret);
 

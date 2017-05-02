@@ -1,6 +1,12 @@
-const jwt = require('jsonwebtoken');
-const getTokenQuery = 'SELECT username, id from Users WHERE username = ? AND password = ?';
-const getAllUsersQuery = 'SELECT username FROM Users';
+const jwt           = require('jsonwebtoken');
+const dbConfig      = require('../config/db')
+const Sequelize     = require('sequelize');
+
+
+const User = dbConfig.db.define('User', {
+  username: Sequelize.STRING,
+  password: Sequelize.STRING,
+});
 
 module.exports = new class UsersModel {
 
@@ -9,45 +15,38 @@ module.exports = new class UsersModel {
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     // Set custom headers for CORS
     res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
-    return new Promise(
-      (resolve, reject) => {
-        req.getConnection((err, connection) => {
-          if (err) return (next(err));
-          console.log(req.body)
-          connection.query(getTokenQuery, [req.body.name, req.body.password], (error, results) => {
-            // console.log(results);
-            // console.log(error);
-            if (results.length > 0) {
-              const token = jwt.sign(results[0], 'hello', {
-                expiresIn: '10h'
-              });
-              req.headers = token;
-              console.log(token);
-              resolve(token);
-            } else {
-              reject({ success: false, message: 'Failed authenticating' });
-            }
-          });
+    return new Promise((resolve, reject) => {
+       User
+        .findOne({ 
+          where: { 
+            username: req.body.name,
+            password: req.body.password, 
+          },
+          attributes: ['username', 'createdAt', 'updatedAt'],
+        })
+        .then((user, err) => {
+          if (user !== undefined) {
+            const token = jwt.sign(user.get({ plain: true }), 'hello', {
+              expiresIn: '10h'
+            });
+            resolve(token);
+          } else {
+            reject({ success: false, message: 'Failed authenticating' });
+          }
         });
-      }
-    );
+    });
   }
 
-  getUsers(req) {
-    return new Promise(
-      (resolve, reject) => {
-        req.getConnection((err, connection) => {
-          connection.query(getAllUsersQuery, (error, results) => {
-            if (results.length > 0) {
-              console.log(results)
-              resolve(results);
-            } else {
-              reject({ success: false, message: 'No users found' });
-            }
-          });
-        });
-      }
-    );
+  getUsers() {
+    return new Promise((resolve, reject) => {
+      User
+        .findAll({
+          attributes: ['username', 'createdAt', 'updatedAt'],
+        })
+        .then((users, err) => {
+          users ? resolve(users) : reject(err);
+        })
+    })
   }
 
   // Token of users is undefined for somereason
@@ -59,9 +58,7 @@ module.exports = new class UsersModel {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
         if (token) {
-          console.log('token',  token)
           jwt.verify(token, 'hello', (err, decoded) => {
-            console.log('auth', err)
             // If jwt is undefined also create error message
             if (err) {
               reject({ success: false, message: 'Failed to authenticate token.' });

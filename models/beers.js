@@ -1,22 +1,24 @@
-const helpers = require('../utils/helpers');
+const helpers       = require('../utils/helpers');
+const Sequelize     = require('sequelize');
+const dbConfig      = require('../config/db');
+
+const Beer = dbConfig.db.define('Beer', {
+  name: Sequelize.STRING,
+  user_id: Sequelize.INTEGER,
+  style: Sequelize.STRING,
+  brewer: Sequelize.STRING,
+  desc: Sequelize.TEXT,
+});
 
 module.exports = new class BeersModel {
 
-  getBeers(req) {
+  getBeers() {
     return new Promise((resolve, reject) => {
-      req.getConnection((error, connection) => {
-        connection.query('SELECT AVG(ratings.rating) as stars, beers.name, beers.style, beers.id, beers.brewer from ratings RIGHT OUTER JOIN beers on ratings.beer_id = beers.id GROUP BY beers.id', (err, results) => {
-          if (err) {
-            reject(err);
-          } else if (results.length > 0) {
-            resolve(results);
-          } else if (results.length === 0) {
-            reject('No beers found');
-          } else {
-            reject(err);
-          }
-        });
-      });
+      Beer
+        .findAll()
+        .then((beers, err) => {
+          beers ? resolve(beers) : reject(err);
+        })
     });
   }
 

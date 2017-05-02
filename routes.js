@@ -23,7 +23,7 @@ router.all('/*', function(req, res, next) {
 router.post('/api/authenticate', [usersCtrl.getToken]);
 
 // Protect all the routes with a token if complete call next()
-router.use('/api/', [usersCtrl.authenticate]);
+// router.use('/api/', [usersCtrl.authenticate]);
 
 // All other routes
 router.get('/api/beers', [beerCtrl.showBeers]);
