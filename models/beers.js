@@ -5,7 +5,7 @@ module.exports = new class BeersModel {
   getBeers(req) {
     return new Promise((resolve, reject) => {
       req.getConnection((error, connection) => {
-        connection.query('SELECT Beer.id, Beer.name, Beer.style, Beer.brewer, AVG(ratings.rating) AS stars FROM Beers AS Beer LEFT OUTER JOIN Ratings ON Beer.id = Ratings.BeerId GROUP BY beer.id', (err, results) => {
+        connection.query('SELECT Beer.id, Beer.name, Beer.style, Beer.brewer, AVG(ratings.rating) AS stars FROM Beers AS Beer LEFT OUTER JOIN Ratings as Ratings ON Beer.id = Ratings.BeerId GROUP BY beer.id', (err, results) => {
           console.log(results ? results : err);
           if (err) {
             reject(err);
@@ -24,7 +24,7 @@ module.exports = new class BeersModel {
   singleBeer(req) {
     return new Promise((resolve, reject) => {
       req.getConnection((error, connection) => {
-        connection.query('SELECT avg(ratings.rating) as stars, beers.name, beers.style, beers.brewer from ratings LEFT JOIN beers on ratings.beer_id = beers.id WHERE beers.id = ?', [req.params.id], (err, results) => {
+        connection.query('SELECT avg(ratings.rating) as stars, Ratings.id AS Ratings.id, beers.name, beers.style, beers.brewer from ratings LEFT JOIN beers on ratings.beer_id = beers.id WHERE beers.id = ?', [req.params.id], (err, results) => {
           if (results.length > 0) {
             resolve(results);
           } else if (results.length === 0) {
