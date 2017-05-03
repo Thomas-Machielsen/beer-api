@@ -89,10 +89,12 @@ function  getBeers() {
   return new Promise((resolve, reject) => {
     Beer
       .findAll({
-        // attributes: ['id'],
+        attributes: ['id', 'name', 'style', 'brewer'],
         include: [{
           model: Rating,
-            attributes: [[Rating.sequelize.fn('AVG', Rating.sequelize.col('Ratings.rating')), 'stars']],
+          required: false,
+            // attributes: ['rating']
+            attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'stars'], 'id'],
         }],
         group: ['id', 'ratings.id']
       })
@@ -104,23 +106,23 @@ function  getBeers() {
 }
 
 
-function avgRating() {
-  return new Promise((resolve, reject) => {
-    Rating.
-      findAll({
-        required: false,
-        attributes: [[Rating.sequelize.fn('AVG', Rating.sequelize.col('Ratings.rating')), 'stars']],
-        include: [{
-          model: Beer,
-        }],
-        required: false,
-        group: ['rating.id']
-      })
-      .then((beers, err) => {
-        console.log(JSON.stringify(beers ? beers : err));
-      })
-  })
-}
+// function avgRating() {
+//   return new Promise((resolve, reject) => {
+//     Rating.
+//       findAll({
+//         required: false,
+//         attributes: [[Rating.sequelize.fn('AVG', Rating.sequelize.col('Ratings.rating')), 'stars']],
+//         include: [{
+//           model: Beer,
+//         }],
+//         required: false,
+//         group: ['rating.id']
+//       })
+//       .then((beers, err) => {
+//         console.log(JSON.stringify(beers ? beers : err));
+//       })
+//   })
+// }
 
 getBeers();
 
