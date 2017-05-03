@@ -8,15 +8,28 @@ const Beer = dbConfig.db.define('Beer', {
   style: Sequelize.STRING,
   brewer: Sequelize.STRING,
   desc: Sequelize.TEXT,
-});
+  } , {
+    classMethods: {
+      associate: (models) => {
+        Beer.belongsTo(models.User, {
+          foreignKey: user_id,
+          onDelete: 'CASCADE',
+        })
+      },
+    },
+  }
+);
 
 module.exports = new class BeersModel {
 
   getBeers() {
     return new Promise((resolve, reject) => {
       Beer
-        .findAll()
+        .findAll({
+          include: [Rating],
+        })
         .then((beers, err) => {
+          console.log(beers ? beers : err);
           beers ? resolve(beers) : reject(err);
         })
     });

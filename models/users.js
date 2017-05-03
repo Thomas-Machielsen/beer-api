@@ -4,8 +4,16 @@ const Sequelize     = require('sequelize');
 
 
 const User = dbConfig.db.define('User', {
-  username: Sequelize.STRING,
-  password: Sequelize.STRING,
+    username: Sequelize.STRING,
+    password: Sequelize.STRING,
+  }, {
+    classMethods: {
+      associate: (models) => {
+        User.hasMany(models.Beer, {
+          foreignKey: user_id,  
+        })
+      }
+  },
 });
 
 module.exports = new class UsersModel {

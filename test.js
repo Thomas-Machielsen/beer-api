@@ -20,11 +20,41 @@ var User = sequelize.define('User', {
 });
 
 const Beer = sequelize.define('Beer', {
-  user_id: Sequelize.INTEGER,
+  name: Sequelize.STRING,
+  userId: Sequelize.INTEGER,
   style: Sequelize.STRING,
   brewer: Sequelize.STRING,
   desc: Sequelize.TEXT,
+  } , {
+    // classMethods: {
+    //   associate: (models) => {
+    //     Beer.hasMany(models.Rating, {
+    //       foreignKey: beer_id,
+    //     })
+    //   },
+    // },
+  }
+);
+
+const Rating = sequelize.define('Rating', {
+  rating: Sequelize.INTEGER,
+  userId: Sequelize.INTEGER,
+  beerId: Sequelize.INTEGER,
+  } , {
+    // classMethods: {
+    //   associate: (models) => {
+    //     Rating.belongsTo(models.Beer, {
+    //       foreignKey: beer_id,
+    //     })
+    //   },
+    // },
+  }
+);
+
+Rating.belongsTo(Beer, {
 })
+Beer.hasMany(Rating, {
+});
 
 // User
 //   .findOne({ 
@@ -34,7 +64,7 @@ const Beer = sequelize.define('Beer', {
 //   .then((user, err) => {
 //     if (user) {
 //       console.log(user.get({
-//         plain: true,
+//         plain: true,< {}
 //       }))
 //     } else {
 //       console.log(err);
@@ -55,17 +85,44 @@ function getUsers(req) {
 // getUsers();
 
 
-function  getBeers(req) {
+function  getBeers() {
   return new Promise((resolve, reject) => {
     Beer
-      .findAll()
+      .findAll({
+        // attributes: ['id'],
+        include: [{
+          model: Rating,
+            attributes: [[Rating.sequelize.fn('AVG', Rating.sequelize.col('Ratings.rating')), 'stars']],
+        }],
+        group: ['id', 'ratings.id']
+      })
       .then((beers, err) => {
-        beers ? resolve(users) : reject(err);
+        console.log(JSON.stringify(beers ? beers : err));
+        beers ? resolve(beers) : reject(err);
       })
   });
 }
 
-// getBeers();
+
+function avgRating() {
+  return new Promise((resolve, reject) => {
+    Rating.
+      findAll({
+        required: false,
+        attributes: [[Rating.sequelize.fn('AVG', Rating.sequelize.col('Ratings.rating')), 'stars']],
+        include: [{
+          model: Beer,
+        }],
+        required: false,
+        group: ['rating.id']
+      })
+      .then((beers, err) => {
+        console.log(JSON.stringify(beers ? beers : err));
+      })
+  })
+}
+
+getBeers();
 
 
 
