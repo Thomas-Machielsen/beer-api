@@ -1,24 +1,27 @@
-const helpers       = require('../utils/helpers');
-const Sequelize     = require('sequelize');
-const dbConfig      = require('../config/db');
+const helpers   = require('../utils/helpers');
+const Sequelize = require('sequelize');
+const dbConfig  = require('../config/db');
+// const Rating        = require('./ratings');
 
 const Beer = dbConfig.db.define('Beer', {
-  name: Sequelize.STRING,
-  user_id: Sequelize.INTEGER,
-  style: Sequelize.STRING,
-  brewer: Sequelize.STRING,
-  desc: Sequelize.TEXT,
-  } , {
-    classMethods: {
-      associate: (models) => {
-        Beer.belongsTo(models.User, {
-          foreignKey: user_id,
-          onDelete: 'CASCADE',
-        })
-      },
-    },
+    name: Sequelize.STRING,
+    userId: Sequelize.INTEGER,
+    style: Sequelize.STRING,
+    brewer: Sequelize.STRING,
+    desc: Sequelize.TEXT
   }
 );
+
+const Rating = dbConfig.db.define('Rating', {
+    rating: Sequelize.INTEGER,
+    userId: Sequelize.INTEGER,
+    beerId: Sequelize.INTEGER
+  }
+);
+
+
+Beer.hasMany(Rating);
+Rating.belongsTo(Beer);
 
 module.exports = new class BeersModel {
 
@@ -26,46 +29,72 @@ module.exports = new class BeersModel {
     return new Promise((resolve, reject) => {
       Beer
         .findAll({
-          include: [Rating],
+          attributes: ['id', 'name', 'style'],
+          required: false,
+          include: [{
+            model: Rating,
+            attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'stars']]
+          }],
+          raw: true,
+          nest: true,
+          group: ['id']
         })
-        .then((beers, err) => {
-          console.log(beers ? beers : err);
-          beers ? resolve(beers) : reject(err);
+        .then((beers) => {
+          resolve(beers);
         })
+        .catch(reject)
     });
   }
 
   singleBeer(req) {
     return new Promise((resolve, reject) => {
-      req.getConnection((error, connection) => {
-        connection.query('SELECT avg(ratings.rating) as stars, beers.name, beers.style, beers.brewer from ratings LEFT JOIN beers on ratings.beer_id = beers.id WHERE beers.id = ?', [req.params.id], (err, results) => {
-          if (results.length > 0) {
-            resolve(results);
-          } else if (results.length === 0) {
-            reject('No beers found');
-          } else {
-            reject(err);
+      Beer
+        .findAll({
+          attributes: ['id', 'name', 'style'],
+          required: false,
+          include: [{
+            model: Rating,
+            attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'stars']]
+          }],
+          raw: true,
+          nest: true,
+          group: ['id'],
+          where: {
+            id : req.params.id
           }
-        });
-      });
+        })
+        .then((beers) => {
+          resolve(beers);
+        })
+        .catch(reject);
     });
   }
 
-  searchBeers(req, res, keysArray, valuesArray) {
-    return new Promise((resolve, reject) => {
-      req.getConnection((error, connection) => {
-        connection.query(helpers.makeSqlString(keysArray, valuesArray), (err, results) => {
-          if (results.length > 0) {
-            resolve(results);
-          } else if (results.length === 0) {
-            reject('No beers found');
-          } else {
-            reject(err);
-          }
-        });
-      });
-    });
-  }
+  // searchBeers(req, res, keysArray, valuesArray) {
+  //
+  //   return new Promise((resolve, reject) => {
+  //     Beer
+  //       .findAll({
+  //         attributes: ['id', 'name', 'style', 'brewer'],
+  //         required: false,
+  //         include: [{
+  //           model: Rating,
+  //           attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'stars']]
+  //         }],
+  //         raw: true,
+  //         nest: true,
+  //         group: ['id'],
+  //         where: {
+  //           id : req.params.id
+  //         }
+  //       })
+  //       .then((beers) => {
+  //         resolve(beers);
+  //       })
+  //       .catch(reject);
+  //       })
+  //   })
+  // }
 
   editBeer(req) {
     return new Promise((resolve, reject) => {
@@ -88,7 +117,7 @@ module.exports = new class BeersModel {
         req.getConnection((error, connection) => {
           connection.query('DELETE from beers where id = ?', [req.body.id], (err, results) => {
             if (results) {
-              resolve({ message: 'succes' });
+              resolve({message: 'succes'});
             } else {
               reject(err);
             }
@@ -102,9 +131,9 @@ module.exports = new class BeersModel {
     return new Promise(
       (resolve, reject) => {
         req.getConnection((error, connection) => {
-          connection.query('INSERT INTO beers (name, brewer, style, user_id) VALUES (?)', [[req.body.name, req.body.brewer, req.body.style, res.locals.decoded.id]], (err, results) => {
+          connection.query('INSERT INTO beers (name, brewer, style, userId) VALUES (?)', [[req.body.name, req.body.brewer, req.body.style, res.locals.decoded.id]], (err, results) => {
             if (results) {
-              resolve({ message: 'succes' });
+              resolve({message: 'succes'});
             } else {
               reject(err);
             }

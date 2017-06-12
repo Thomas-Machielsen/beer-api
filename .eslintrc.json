@@ -1,13 +1,37 @@
 {
-    "extends": "airbnb-base",
-    "plugins": [
-        "import"
+  "parser": "babel-eslint",
+  "extends": "eslint:recommended",
+
+  "env": {
+    "browser": true,
+    "es6": true,
+    "mocha": true,
+    "node": true
+  },
+  "plugins": [
+    "import"
+  ],
+  "rules": {
+    "no-plusplus": "off",
+    "comma-dangle": [
+      "error",
+      "never"
     ],
-    "rules": {
-      "no-plusplus": "off",
-      "comma-dangle": ["error", "never"],
-      "no-param-reassign": [2, { "props": false }],
-      "class-methods-use-this": "off",
-      "consistent-return": "off",
-      "no-multi-spaces": ["error", { "exceptions": { "VariableDeclarator": true } }]    }
+    "no-param-reassign": [
+      2,
+      {
+        "props": false
+      }
+    ],
+    "class-methods-use-this": "off",
+    "consistent-return": "off",
+    "no-multi-spaces": [
+      "error",
+      {
+        "exceptions": {
+          "VariableDeclarator": true
+        }
+      }
+    ]
+  }
 }

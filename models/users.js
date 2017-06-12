@@ -4,22 +4,14 @@ const Sequelize     = require('sequelize');
 
 
 const User = dbConfig.db.define('User', {
-    username: Sequelize.STRING,
-    password: Sequelize.STRING,
-  }, {
-    classMethods: {
-      associate: (models) => {
-        User.hasMany(models.Beer, {
-          foreignKey: user_id,  
-        })
-      }
-  },
+  username: Sequelize.STRING,
+  password: Sequelize.STRING
 });
 
 module.exports = new class UsersModel {
 
-  getToken(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
+  getToken(req, res) {
+    res.header('Access-Control-Allow-Origin', '*'); // restrict it to the required domain
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     // Set custom headers for CORS
     res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
@@ -28,11 +20,11 @@ module.exports = new class UsersModel {
         .findOne({ 
           where: { 
             username: req.body.name,
-            password: req.body.password, 
+            password: req.body.password
           },
-          attributes: ['username', 'createdAt', 'updatedAt'],
+          attributes: ['username', 'createdAt', 'updatedAt']
         })
-        .then((user, err) => {
+        .then((user) => {
           if (user !== undefined) {
             const token = jwt.sign(user.get({ plain: true }), 'hello', {
               expiresIn: '10h'
@@ -49,11 +41,12 @@ module.exports = new class UsersModel {
     return new Promise((resolve, reject) => {
       User
         .findAll({
-          attributes: ['username', 'createdAt', 'updatedAt'],
+          attributes: ['username', 'createdAt', 'updatedAt']
         })
-        .then((users, err) => {
-          users ? resolve(users) : reject(err);
+        .then((users) => {
+          resolve(users)
         })
+        .catch(reject)
     })
   }
 

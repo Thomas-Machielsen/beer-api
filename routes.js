@@ -29,7 +29,7 @@ router.post('/api/authenticate', [usersCtrl.getToken]);
 router.get('/api/beers', [beerCtrl.showBeers]);
 router.get('/api/beers/search*', [beerCtrl.searchBeers]);
 router.get('/api/users', [usersCtrl.getUsers]);
-router.get('/api/beers/:id', [beerCtrl.singleBeer])
+router.get('/api/beers/:id', [beerCtrl.singleBeer]);
 router.put('/api/beer/:id', [beerCtrl.editBeer]);
 router.delete('/api/beer/:id', [beerCtrl.deleteBeer]);
 router.post('/api/beer', [beerCtrl.addBeer]);

@@ -2,5 +2,8 @@ node_modules
 nginx_config
 sessions
 config/localConfig.json
+config/db.js
 crap.js
 test.js
+.idea
+test.sql

@@ -3,7 +3,13 @@ const mysql = require('mysql');
 function makeSqlString(keysArray, valuesArray) {
   const keyPairArray = [];
 
-  let sqlString = 'SELECT avg(ratings.rating) as stars, beers.name, beers.style, beers.brewer from ratings RIGHT OUTER JOIN beers on ratings.id = beers.id WHERE ';
+  let sqlString = 'SELECT avg(ratings.rating) as stars' +
+    '            , beers.name, ' +
+    '              beers.style, ' +
+    '              beers.brewer ' +
+    '              from ratings ' +
+    '              RIGHT OUTER JOIN beers on ratings.id = beers.id ' +
+    '              WHERE ';
   for (let i = 0; i < keysArray.length; i++) {
     sqlString += '?? LIKE ? AND ';
     keyPairArray.push(keysArray[i]);
@@ -17,4 +23,15 @@ function makeSqlString(keysArray, valuesArray) {
   return sqlQuery;
 }
 
-module.exports = { makeSqlString };
+
+function makeQuery(keysArray, valuesArray) {
+  let obj = "";
+
+  for(const index in keysArray) {
+    obj += `${keysArray[index]}: {$like : "%${valuesArray[index]}%" }, `;
+  }
+  const newObj = "where: {" + obj + "}";
+  return newObj;
+}
+
+module.exports = { makeSqlString, makeQuery };
