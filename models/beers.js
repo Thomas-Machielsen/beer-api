@@ -1,16 +1,10 @@
-const helpers   = require('../utils/helpers');
-const Sequelize = require('sequelize');
-const dbConfig  = require('../config/db');
+const helpers         = require('../utils/helpers');
+const Sequelize       = require('sequelize');
+const BeerSchema      = require('../schemas/Beer');
+const dbConfig        = require('../config/db');
 // const Rating        = require('./ratings');
 
-const Beer = dbConfig.db.define('Beer', {
-    name: Sequelize.STRING,
-    userId: Sequelize.INTEGER,
-    style: Sequelize.STRING,
-    brewer: Sequelize.STRING,
-    desc: Sequelize.TEXT
-  }
-);
+
 
 const Rating = dbConfig.db.define('Rating', {
     rating: Sequelize.INTEGER,
@@ -19,14 +13,14 @@ const Rating = dbConfig.db.define('Rating', {
   }
 );
 
-Beer.hasMany(Rating);
-Rating.belongsTo(Beer);
+BeerSchema.Beer.hasMany(Rating);
+Rating.belongsTo(BeerSchema.Beer);
 
 module.exports = new class BeersModel {
 
   getBeers() {
     return new Promise((resolve, reject) => {
-      Beer
+      BeerSchema.Beer
         .findAll({
           attributes: ['id', 'name', 'style'],
           required: false,
@@ -47,7 +41,7 @@ module.exports = new class BeersModel {
 
   singleBeer(req) {
     return new Promise((resolve, reject) => {
-      Beer
+      BeerSchema.Beer
         .findAll({
           attributes: ['id', 'name', 'style'],
           required: false,
