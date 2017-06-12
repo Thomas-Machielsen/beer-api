@@ -19,7 +19,6 @@ const Rating = dbConfig.db.define('Rating', {
   }
 );
 
-
 Beer.hasMany(Rating);
 Rating.belongsTo(Beer);
 
