@@ -1,4 +1,4 @@
-const BeersModel = require('./../models/beers');
+const BeersModel = require('../services/beers');
 
 function showBeers(req, res) {
   BeersModel.getBeers()

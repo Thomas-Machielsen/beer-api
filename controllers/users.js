@@ -1,4 +1,4 @@
-const UsersModel = require('./../models/users');
+const UsersModel = require('../services/users');
 
 function getUsers(req, res) {
   UsersModel.getUsers(req, res)
