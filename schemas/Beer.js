@@ -1,5 +1,6 @@
 const dbConfig        = require('../config/db');
 const Sequelize       = require('sequelize');
+const RatingSchema    = require('./Rating');
 
 const Beer = dbConfig.db.define('Beer', {
     name: Sequelize.STRING,
@@ -9,5 +10,8 @@ const Beer = dbConfig.db.define('Beer', {
     desc: Sequelize.TEXT
   }
 );
+
+RatingSchema.Rating.belongsTo(Beer);
+Beer.hasMany(RatingSchema.Rating);
 
 module.exports = { Beer };

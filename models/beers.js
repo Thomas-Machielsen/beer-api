@@ -1,20 +1,6 @@
-const helpers         = require('../utils/helpers');
 const Sequelize       = require('sequelize');
 const BeerSchema      = require('../schemas/Beer');
-const dbConfig        = require('../config/db');
-// const Rating        = require('./ratings');
-
-
-
-const Rating = dbConfig.db.define('Rating', {
-    rating: Sequelize.INTEGER,
-    userId: Sequelize.INTEGER,
-    beerId: Sequelize.INTEGER
-  }
-);
-
-BeerSchema.Beer.hasMany(Rating);
-Rating.belongsTo(BeerSchema.Beer);
+const RatingSchema    = require('../schemas/Rating');
 
 module.exports = new class BeersModel {
 
@@ -25,7 +11,7 @@ module.exports = new class BeersModel {
           attributes: ['id', 'name', 'style'],
           required: false,
           include: [{
-            model: Rating,
+            model: RatingSchema.Rating,
             attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'stars']]
           }],
           raw: true,
@@ -46,7 +32,7 @@ module.exports = new class BeersModel {
           attributes: ['id', 'name', 'style'],
           required: false,
           include: [{
-            model: Rating,
+            model: RatingSchema.Rating,
             attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'stars']]
           }],
           raw: true,
