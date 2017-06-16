@@ -1,6 +1,9 @@
 const Sequelize       = require('sequelize');
 const BeerSchema      = require('../schemas/Beer');
 const RatingSchema    = require('../schemas/Rating');
+RatingSchema.associations(BeerSchema.Beer);
+BeerSchema.associations(RatingSchema.Rating);
+
 
 module.exports = new class BeersModel {
 
@@ -49,31 +52,32 @@ module.exports = new class BeersModel {
     });
   }
 
-  // searchBeers(req, res, keysArray, valuesArray) {
-  //
-  //   return new Promise((resolve, reject) => {
-  //     Beer
-  //       .findAll({
-  //         attributes: ['id', 'name', 'style', 'brewer'],
-  //         required: false,
-  //         include: [{
-  //           model: Rating,
-  //           attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'stars']]
-  //         }],
-  //         raw: true,
-  //         nest: true,
-  //         group: ['id'],
-  //         where: {
-  //           id : req.params.id
-  //         }
-  //       })
-  //       .then((beers) => {
-  //         resolve(beers);
-  //       })
-  //       .catch(reject);
-  //       })
-  //   })
-  // }
+
+
+  searchBeers() {
+    return new Promise((resolve, reject) => {
+      BeerSchema.Beer
+        .findAll({
+          attributes: ['id', 'name', 'style', 'brewer'],
+          required: false,
+          include: [{
+            model: RatingSchema.Rating,
+            attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'stars']]
+          }],
+          raw: true,
+          nest: true,
+          group: ['id'],
+          where: {
+
+          }
+        })
+        .then((beers) => {
+          resolve(beers);
+        })
+        .catch(reject);
+
+    });
+  }
 
   editBeer(req) {
     return new Promise((resolve, reject) => {

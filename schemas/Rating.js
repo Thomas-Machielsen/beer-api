@@ -8,4 +8,9 @@ const Rating = dbConfig.db.define('Rating', {
   }
 );
 
-module.exports = { Rating };
+function associations (Beer) {
+  Rating.belongsTo(Beer);
+}
+
+
+module.exports = { Rating, associations };
