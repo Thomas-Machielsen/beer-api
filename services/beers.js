@@ -4,18 +4,22 @@ const RatingSchema    = require('../schemas/Rating');
 RatingSchema.associations(BeerSchema.Beer);
 BeerSchema.associations(RatingSchema.Rating);
 
+const attributesArray = ['id', 'name', 'style'];
+const starAttribute   = [[Sequelize.fn('AVG', Sequelize.col('rating')), 'stars']];
+
 
 module.exports = new class BeersModel {
 
+  //todo: style moet als het aangepast wordt in db  meerdere malen aangepast worden (dataprovider)
   getBeers() {
     return new Promise((resolve, reject) => {
       BeerSchema.Beer
         .findAll({
-          attributes: ['id', 'name', 'style'],
+          attributes: attributesArray,
           required: false,
           include: [{
             model: RatingSchema.Rating,
-            attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'stars']]
+            attributes: starAttribute
           }],
           raw: true,
           nest: true,
@@ -28,15 +32,16 @@ module.exports = new class BeersModel {
     });
   }
 
+  //todo: getbeers & singlebeer zelfde code block
   singleBeer(req) {
     return new Promise((resolve, reject) => {
       BeerSchema.Beer
         .findAll({
-          attributes: ['id', 'name', 'style'],
+          attributes: attributesArray,
           required: false,
           include: [{
             model: RatingSchema.Rating,
-            attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'stars']]
+            attributes: starAttribute
           }],
           raw: true,
           nest: true,
@@ -58,11 +63,11 @@ module.exports = new class BeersModel {
     return new Promise((resolve, reject) => {
       BeerSchema.Beer
         .findAll({
-          attributes: ['id', 'name', 'style', 'brewer'],
+          attributes: attributesArray,
           required: false,
           include: [{
             model: RatingSchema.Rating,
-            attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'stars']]
+            attributes: starAttribute
           }],
           raw: true,
           nest: true,

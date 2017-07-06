@@ -1,5 +1,6 @@
 const BeersModel = require('../services/beers');
 
+//todo: dit is geen 404
 function showBeers(req, res) {
   BeersModel.getBeers()
   .then(results => res.json({ data: results }))

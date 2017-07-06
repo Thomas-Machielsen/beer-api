@@ -5,6 +5,8 @@ const router    = module.exports = Router();
 const beerCtrl  = require('./controllers/beers');
 const usersCtrl = require('./controllers/users');
 
+
+//todo: kan dit met router.use?
 router.all('/*', function(req, res, next) {
   // CORS headers
   res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
