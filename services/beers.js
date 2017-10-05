@@ -1,16 +1,15 @@
-const Sequelize       = require('sequelize');
+const Sequelize       = reqire('sequelize');
 const BeerSchema      = require('../schemas/Beer');
 const RatingSchema    = require('../schemas/Rating');
 RatingSchema.associations(BeerSchema.Beer);
 BeerSchema.associations(RatingSchema.Rating);
 
-const attributesArray = ['id', 'name', 'style'];
+const attributesArray = ['id', 'name'];
 const starAttribute   = [[Sequelize.fn('AVG', Sequelize.col('rating')), 'stars']];
 
 
 module.exports = new class BeersModel {
 
-  //todo: style moet als het aangepast wordt in db  meerdere malen aangepast worden (dataprovider)
   getBeers() {
     return new Promise((resolve, reject) => {
       BeerSchema.Beer
@@ -77,6 +76,7 @@ module.exports = new class BeersModel {
           }
         })
         .then((beers) => {
+          console.log(beers);
           resolve(beers);
         })
         .catch(reject);

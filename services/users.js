@@ -1,5 +1,5 @@
 const jwt           = require('jsonwebtoken');
-const dbConfig      = require('../config/db')
+const dbConfig      = require('../config/db');
 const Sequelize     = require('sequelize');
 
 

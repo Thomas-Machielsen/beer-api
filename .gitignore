@@ -3,6 +3,6 @@ nginx_config
 sessions
 config/
 crap.js
-test.js
+isolatedProblem.js
 .idea
 test.sql
