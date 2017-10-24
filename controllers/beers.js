@@ -1,17 +1,8 @@
 const BeersModel = require('../services/beers');
 
 //todo: dit is geen 404
-function showBeers(req, res) {
-  BeersModel.getBeers()
-  .then(results => res.json({ data: results }))
-  .catch((err) => {
-    res.status(404);
-    res.json({ error: err });
-  });
-}
-
-function singleBeer(req, res) {
-  BeersModel.singleBeer(req)
+function getBeer(req, res) {
+  BeersModel.getBeer(req)
   .then(results => res.json({ data: results }))
   .catch((err) => {
     res.status(404);
@@ -58,5 +49,5 @@ function addBeer(req, res) {
   });
 }
 
-module.exports = { showBeers, searchBeers, editBeer, deleteBeer, addBeer, singleBeer };
+module.exports = { searchBeers, editBeer, deleteBeer, addBeer, getBeer };
 

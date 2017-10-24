@@ -6,3 +6,5 @@ crap.js
 isolatedProblem.js
 .idea
 test.sql
+**/*.test.js
+services/beers.test.js
