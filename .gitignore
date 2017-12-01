@@ -1,6 +1,4 @@
 node_modules
-nginx_config
-sessions
-config/localConfig.json
-crap.js
-test.js
+config/
+.idea
+**/*.test.js
