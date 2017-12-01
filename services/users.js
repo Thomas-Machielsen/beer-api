@@ -19,7 +19,7 @@ module.exports = new class UsersModel {
        User
         .findOne({ 
           where: { 
-            username: req.body.name,
+            username: req.body.username,
             password: req.body.password
           },
           attributes: ['username', 'createdAt', 'updatedAt']
@@ -55,7 +55,7 @@ module.exports = new class UsersModel {
     return new Promise(
       (resolve, reject) => {
         // check header or url parameters or post parameters for token
-        const token = req.body.token || req.query.token || req.headers['x-access-token'];
+        const token = req.body.token || req.query.token || req.headers['xaccess-token'] || req.headers.authorization;
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
         if (token) {

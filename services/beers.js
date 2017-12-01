@@ -1,31 +1,35 @@
-const Sequelize       = require('sequelize');
-const BeerSchema      = require('../schemas/Beer');
-const RatingSchema    = require('../schemas/Rating');
-RatingSchema.associations(BeerSchema.Beer);
-BeerSchema.associations(RatingSchema.Rating);
 
-const attributesArray = ['id', 'name'];
-const starAttribute   = [[Sequelize.fn('AVG', Sequelize.col('rating')), 'stars']];
-let whereStatement = {};
+module.exports = class BeersService {
 
-module.exports = new class BeersModel {
+    constructor(Sequelize, BeerSchema, RatingSchema) {
+        this.Sequelize = Sequelize;
+        this.BeerSchema = BeerSchema;
+        this.RatingSchema = RatingSchema;
+
+        this.attributesArray = ['id', 'name', 'style', 'brewer'];
+        this.starAttribute = [[this.Sequelize.fn('AVG', this.Sequelize.col('rating')), 'stars']];
+
+        this.RatingSchema.associations(this.BeerSchema.Beer);
+        this.BeerSchema.associations(this.RatingSchema.Rating);
+    }
 
     getBeer(req) {
+        let whereStatement = {};
 
         if(req.params.id) {
-            whereStatement = { id: [req.params.id]};
+            whereStatement = { id: [req.params.id] };
         } else {
             whereStatement = {};
         }
 
         return new Promise((resolve, reject) => {
-            BeerSchema.Beer
+            this.BeerSchema.Beer
                 .findAll({
-                    attributes: attributesArray,
+                    attributes: this.attributesArray,
                     required: false,
                     include: [{
-                        model: RatingSchema.Rating,
-                        attributes: starAttribute
+                        model: this.RatingSchema.Rating,
+                        attributes: this.starAttribute
                     }],
                     raw: true,
                     nest: true,
@@ -33,32 +37,11 @@ module.exports = new class BeersModel {
                     where: whereStatement
                 })
                 .then((beers) => {
-                    resolve(beers);
-                })
-                .catch((e) => {
-                    reject(e)
-                });
-        });
-    }
-
-
-    searchBeers() {
-        return new Promise((resolve, reject) => {
-            BeerSchema.Beer
-                .findAll({
-                    attributes: attributesArray,
-                    required: false,
-                    include: [{
-                        model: RatingSchema.Rating,
-                        attributes: starAttribute
-                    }],
-                    raw: true,
-                    nest: true,
-                    group: ['id'],
-
-                })
-                .then((beers) => {
-                    resolve(beers);
+                    if(beers.length > 0) {
+                        resolve(beers);
+                    } else {
+                        reject(new Error('No beers found'))
+                    }
                 })
                 .catch((e) => {
                     reject(e)
@@ -80,14 +63,13 @@ module.exports = new class BeersModel {
         });
     }
 
-
     deleteBeer(req) {
         return new Promise(
             (resolve, reject) => {
                 req.getConnection((error, connection) => {
                 connection.query('DELETE from beers where id = ?', [req.body.id], (err, results) => {
                     if (results) {
-                        resolve({message: 'succes'});
+                        resolve(results);
                     } else {
                         reject(err);
                     }
@@ -97,13 +79,13 @@ module.exports = new class BeersModel {
         );
     }
 
-    addBeer(req, res) {
+    addBeer(req) {
         return new Promise(
             (resolve, reject) => {
                 req.getConnection((error, connection) => {
-                connection.query('INSERT INTO beers (name, brewer, style, userId) VALUES (?)', [[req.body.name, req.body.brewer, req.body.style, res.locals.decoded.id]], (err, results) => {
+                connection.query('INSERT INTO beers (name, brewer, style, userId) VALUES (?)', [[req.body.name, req.body.brewer, req.body.style, 1]], (err, results) => {
                 if (results) {
-                    resolve({message: 'succes'});
+                    resolve(results);
                 } else {
                     reject(err);
                 }
@@ -113,5 +95,5 @@ module.exports = new class BeersModel {
         );
     }
 
-}();
+};
 

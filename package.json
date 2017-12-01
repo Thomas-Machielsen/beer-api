@@ -11,7 +11,8 @@
     "env": "env",
     "prebuild": "npm run lint",
     "watch:js": "onchange '**/**/*.js' -i -- npm run build",
-    "watch": "npm run watch:js"
+    "watch": "npm run watch:js",
+    "watch:test": "onchange '**/**/*.test.js' -i -- npm run test"
   },
   "license": "MIT",
   "dependencies": {

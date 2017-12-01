@@ -24,13 +24,13 @@ router.all('/*', function(req, res, next) {
 router.post('/api/authenticate', [usersCtrl.getToken]);
 
 // Protect all the routes with a token if complete call next()
-// router.use('/api/', [usersCtrl.authenticate]);
+router.use('/api/', [usersCtrl.authenticate]);
 
 // All other routes
 router.get('/api/beers', [beerCtrl.getBeer]);
-router.get('/api/beers/search*', [beerCtrl.searchBeers]);
 router.get('/api/users', [usersCtrl.getUsers]);
 router.get('/api/beers/:id', [beerCtrl.getBeer]);
+
 router.put('/api/beer/:id', [beerCtrl.editBeer]);
 router.delete('/api/beer/:id', [beerCtrl.deleteBeer]);
 router.post('/api/beer', [beerCtrl.addBeer]);
