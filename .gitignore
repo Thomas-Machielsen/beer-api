@@ -1,10 +1,4 @@
 node_modules
-nginx_config
-sessions
 config/
-crap.js
-isolatedProblem.js
 .idea
-test.sql
 **/*.test.js
-services/beers.test.js
