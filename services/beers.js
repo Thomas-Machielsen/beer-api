@@ -6,7 +6,8 @@ module.exports = class BeersService {
         this.BeerSchema = BeerSchema;
         this.RatingSchema = RatingSchema;
 
-        this.attributesArray = ['id', 'name', 'style', 'brewer'];
+        this.attributesArray = ['name', 'style', 'brewer'];
+        this.attributesArrayWithId = ['id', 'name', 'style', 'brewer'];
         this.starAttribute = [[this.Sequelize.fn('AVG', this.Sequelize.col('rating')), 'stars']];
 
         this.RatingSchema.associations(this.BeerSchema.Beer);
@@ -25,7 +26,7 @@ module.exports = class BeersService {
         return new Promise((resolve, reject) => {
             this.BeerSchema.Beer
                 .findAll({
-                    attributes: this.attributesArray,
+                    attributes: this.attributesArrayWithId,
                     required: false,
                     include: [{
                         model: this.RatingSchema.Rating,
@@ -51,46 +52,56 @@ module.exports = class BeersService {
 
     editBeer(req) {
         return new Promise((resolve, reject) => {
-            req.getConnection((error, connection) => {
-                connection.query('UPDATE beers SET style = ?, brewer = ?, name = ? WHERE id = ?', [req.body.style, req.body.brewer, req.body.name, req.params.id], (err, results) => {
-                    if (results) {
+            this.BeerSchema.Beer
+                .update(
+                    {
+                        name: req.body.name,
+                        brewer: req.body.brewer,
+                        style: req.body.style
+                    },
+                    {
+                        where: { id : req.params.id }
+                    })
+                .then(results => {
+                    if(results) {
                         resolve(results);
                     } else {
-                        reject(err);
-                    }
-                });
-            });
+                        reject(new Error)
+                    }})
+                .catch(() => {
+                    reject(new Error)
+                })
         });
     }
 
     deleteBeer(req) {
-        return new Promise(
-            (resolve, reject) => {
-                req.getConnection((error, connection) => {
-                connection.query('DELETE from beers where id = ?', [req.body.id], (err, results) => {
-                    if (results) {
-                        resolve(results);
-                    } else {
-                        reject(err);
+        return new Promise((resolve, reject) => {
+            this.BeerSchema.Beer
+                .destroy({
+                    where: {
+                        id: req.params.id
                     }
-                });
-            });
-            }
-        );
+                })
+                .then(results => {
+                    resolve(results);
+                })
+                .catch((e) => e);
+        });
     }
 
     addBeer(req) {
-        return new Promise(
-            (resolve, reject) => {
-                req.getConnection((error, connection) => {
-                connection.query('INSERT INTO beers (name, brewer, style, userId) VALUES (?)', [[req.body.name, req.body.brewer, req.body.style, 1]], (err, results) => {
-                if (results) {
+        return new Promise((resolve, reject) => {
+            this.BeerSchema.Beer
+                .create({
+                    name: req.body.name,
+                    brewer: req.body.brewer,
+                    style: req.body.style,
+                    userId: 1
+                })
+                .then(results => {
                     resolve(results);
-                } else {
-                    reject(err);
-                }
-                });
-            });
+                })
+                .catch((e) => e);
             }
         );
     }
