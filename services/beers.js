@@ -68,8 +68,8 @@ module.exports = class BeersService {
                     } else {
                         reject(new Error)
                     }})
-                .catch(() => {
-                    reject(new Error)
+                .catch(err => {
+                    reject(new Error(err))
                 })
         });
     }
@@ -85,7 +85,9 @@ module.exports = class BeersService {
                 .then(results => {
                     resolve(results);
                 })
-                .catch((e) => e);
+                .catch(err => {
+                    reject(new Error(err))
+                })
         });
     }
 
