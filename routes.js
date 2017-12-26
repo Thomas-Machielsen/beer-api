@@ -4,6 +4,7 @@ const router    = module.exports = Router();
 // Controllers
 const beerCtrl  = require('./controllers/beers');
 const usersCtrl = require('./controllers/users');
+const authCtrl  = require('./controllers/authentication');
 
 
 //todo: kan dit met router.use?
@@ -21,15 +22,17 @@ router.all('/*', function(req, res, next) {
 });
 
 // Route to login, get verified and get a token
-router.post('/api/authenticate', [usersCtrl.getToken]);
+router.post('/api/authenticate', [authCtrl.getToken]);
 
 // Protect all the routes with a token if complete call next()
-router.use('/api/', [usersCtrl.authenticate]);
+router.use('/api/', [authCtrl.authenticate]);
 
-// All other routes
+// All other routes which are accessible by everyone
 router.get('/api/beers', [beerCtrl.getBeer]);
 router.get('/api/users', [usersCtrl.getUsers]);
 router.get('/api/beers/:id', [beerCtrl.getBeer]);
+
+// Routes which are protected and only accessible by admin/write rights
 
 router.put('/api/beer/:id', [beerCtrl.editBeer]);
 router.delete('/api/beer/:id', [beerCtrl.deleteBeer]);

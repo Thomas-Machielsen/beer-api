@@ -1,4 +1,3 @@
-
 module.exports = class BeersService {
 
     constructor(Sequelize, BeerSchema, RatingSchema) {
@@ -6,7 +5,6 @@ module.exports = class BeersService {
         this.BeerSchema = BeerSchema;
         this.RatingSchema = RatingSchema;
 
-        this.attributesArray = ['name', 'style', 'brewer'];
         this.attributesArrayWithId = ['id', 'name', 'style', 'brewer'];
         this.starAttribute = [[this.Sequelize.fn('AVG', this.Sequelize.col('rating')), 'stars']];
 
