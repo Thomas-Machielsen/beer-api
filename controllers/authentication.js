@@ -16,4 +16,12 @@ function authenticate(req, res, next) {
         });
 }
 
-module.exports = { getToken, authenticate };
+function authorize(req, res, next) {
+    AuthenticateModel.authorize(req, res, next)
+        .then(results => res.json({ data: results }))
+        .catch((err) => {
+            res.json({ error: err });
+        });
+}
+
+module.exports = { getToken, authenticate, authorize };

@@ -33,6 +33,7 @@ router.get('/api/users', [usersCtrl.getUsers]);
 router.get('/api/beers/:id', [beerCtrl.getBeer]);
 
 // Routes which are protected and only accessible by admin/write rights
+router.use('/api/beer/', [authCtrl.authorize]);
 
 router.put('/api/beer/:id', [beerCtrl.editBeer]);
 router.delete('/api/beer/:id', [beerCtrl.deleteBeer]);

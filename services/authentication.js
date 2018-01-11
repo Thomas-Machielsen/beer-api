@@ -19,7 +19,7 @@ module.exports = new class UsersModel {
                         username: req.body.username,
                         password: req.body.password
                     },
-                    attributes: ['username']
+                    attributes: ['username', 'role']
                 })
                 .then((user) => {
                     authHelper.returnToken(user, resolve, reject);
@@ -29,11 +29,19 @@ module.exports = new class UsersModel {
 
     authenticate(req, res, next) {
         return new Promise((reject) => {
-                // check header or url parameters or post parameters for token
-                const token = req.body.token || req.query.token || req.headers['xaccess-token'] || req.headers.authorization;
-                authHelper.authToken(res, next, token, reject);
-            }
-        );
+            // check header or url parameters or post parameters for token
+            const token = req.body.token || req.query.token || req.headers['xaccess-token'] || req.headers.authorization;
+            authHelper.authToken(res, next, token, reject);
+
+        });
+    }
+
+    authorize(req, res, next) {
+        return new Promise((reject) => {
+            const token = req.body.token || req.query.token || req.headers['xaccess-token'] || req.headers.authorization;
+            authHelper.authorizeToken(res, next, token, reject);
+
+        });
     }
 
 }();
