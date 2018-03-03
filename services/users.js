@@ -13,12 +13,10 @@ module.exports = new class UsersModel {
         return new Promise((resolve, reject) => {
             User
                 .findAll({
-                    attributes: ['username', 'createdAt', 'updatedAt']
+                    attributes: ['username', 'role']
                 })
-                .then((users) => {
-                    resolve(users)
-                })
-                .catch(reject)
+                .then(users => resolve(users))
+                .catch(reject);
         })
     }
 

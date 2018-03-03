@@ -6,13 +6,6 @@ const beerCtrl  = require('./controllers/beers');
 const usersCtrl = require('./controllers/users');
 const authCtrl  = require('./controllers/authentication');
 
-router.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
-
-
 // Route to login, get verified and get a token
 router.post('/api/authenticate', [authCtrl.getToken]);
 //
