@@ -3,25 +3,19 @@ const AuthenticateModel = require('../services/authentication');
 function getToken(req, res) {
     AuthenticateModel.getToken(req, res)
         .then(results => res.json({ data: results }))
-        .catch((err) => {
-            res.json({ error: err });
-        });
+        .catch(err => res.json({ error: err }));
 }
 
 function authenticate(req, res, next) {
     AuthenticateModel.authenticate(req, res, next)
-        .then(results => res.json({ data: results }))
-        .catch((err) => {
-            res.json({ error: err });
-        });
+        .then(results => res.json({data: results}))
+        .catch(err => res.json({error: err}));
 }
 
 function authorize(req, res, next) {
     AuthenticateModel.authorize(req, res, next)
-        .then(results => res.json({ data: results }))
-        .catch((err) => {
-            res.json({ error: err });
-        });
+        .then(results => res.json({data: results}))
+        .catch(err => res.json({error: err}));
 }
 
 module.exports = { getToken, authenticate, authorize };

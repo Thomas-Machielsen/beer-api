@@ -13,6 +13,7 @@ module.exports = class BeersService {
     }
 
     getBeer(req) {
+        // @todo should be a function
         let whereStatement = {};
 
         if(req.params.id) {
@@ -101,7 +102,9 @@ module.exports = class BeersService {
                 .then(results => {
                     resolve(results);
                 })
-                .catch((e) => e);
+                .catch(err => {
+                    reject(new Error(err))
+                });
             }
         );
     }

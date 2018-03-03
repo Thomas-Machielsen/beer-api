@@ -1,13 +1,13 @@
 const dbConfig = require('../config/db');
 const Sequelize = require('sequelize');
 const authHelper = require('../utils/authHelper');
-
+const Validator = require('../utils/validator/Validator');
+const validations = require('../utils/validator/validations/validations');
 
 const User = dbConfig.db.define('User', {
     username: Sequelize.STRING,
     password: Sequelize.STRING
 });
-
 
 module.exports = new class UsersModel {
 
@@ -21,26 +21,42 @@ module.exports = new class UsersModel {
                     },
                     attributes: ['username', 'role']
                 })
-                .then((user) => {
-                    authHelper.returnToken(user, resolve, reject);
-                });
+                .then((user) => authHelper.returnToken(user)
+                    .then((value) => resolve(value)))
+                    .catch((value) => reject(value));
         });
     }
 
+    // @todo these functions are too much the same think of something better
     authenticate(req, res, next) {
         return new Promise((reject) => {
-            // check header or url parameters or post parameters for token
+            // @todo getToken function
             const token = req.body.token || req.query.token || req.headers['xaccess-token'] || req.headers.authorization;
-            authHelper.authToken(res, next, token, reject);
 
+            // @todo build tokenToValidate
+            const tokenToValidate = {
+                data: [token],
+                validations: [validations.isTokenDefined, validations.verifyToken]
+            };
+
+            Validator.validate(tokenToValidate).then((value) => {
+                value.success ? next() : reject(value);
+            });
         });
     }
 
     authorize(req, res, next) {
         return new Promise((reject) => {
             const token = req.body.token || req.query.token || req.headers['xaccess-token'] || req.headers.authorization;
-            authHelper.authorizeToken(res, next, token, reject);
 
+            const tokenToValidate = {
+                data: [token],
+                validations: [validations.isTokenDefined, validations.verifyToken, validations.authorizeToken]
+            };
+
+            Validator.validate(tokenToValidate).then((value) => {
+                value.success ? next() : reject(value);
+            });
         });
     }
 
