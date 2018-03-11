@@ -5,7 +5,6 @@ const BeersService    = require('../services/beers');
 
 const Beers = new BeersService(Sequelize, BeerSchema, RatingSchema);
 
-//todo: dit is geen 404
 function getBeer(req, res) {
   Beers.getBeer(req)
   .then(results => res.json({ data: results }))

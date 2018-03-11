@@ -1,3 +1,5 @@
+const helpers = require('../utils/helpers');
+
 module.exports = class BeersService {
 
     constructor(Sequelize, BeerSchema, RatingSchema) {
@@ -13,14 +15,6 @@ module.exports = class BeersService {
     }
 
     getBeer(req) {
-        // @todo should be a function
-        let whereStatement = {};
-
-        if(req.params.id) {
-            whereStatement = { id: [req.params.id] };
-        } else {
-            whereStatement = {};
-        }
 
         return new Promise((resolve, reject) => {
             this.BeerSchema.Beer
@@ -34,7 +28,7 @@ module.exports = class BeersService {
                     raw: true,
                     nest: true,
                     group: ['id'],
-                    where: whereStatement
+                    where: helpers.getWhereStatement(req.params.id)
                 })
                 .then((beers) => {
                     if(beers.length > 0) {

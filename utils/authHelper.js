@@ -11,4 +11,15 @@ const returnToken = user => {
     });
 };
 
-module.exports = { returnToken };
+const findToken = req => {
+    return req.body.token || req.query.token || req.headers['xaccess-token'] || req.headers.authorization;
+};
+
+const generateTokenToValidate = (token, validations) => {
+    return {
+        data: [token],
+        validations: validations
+    };
+};
+
+module.exports = { returnToken, generateTokenToValidate, findToken };
