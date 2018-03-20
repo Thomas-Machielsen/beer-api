@@ -10,6 +10,7 @@
     "build": "node --harmony app.js",
     "env": "env",
     "prebuild": "npm run lint",
+    "precommit": "eslint *//*.js",
     "watch:js": "onchange '**/**/*.js' -i -- npm run build",
     "watch": "npm run watch:js",
     "watch:test": "onchange '**/**/*.test.js' -i -- npm run test"
