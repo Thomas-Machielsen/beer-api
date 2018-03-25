@@ -10,4 +10,8 @@ const ROLES = {
     USER: 'user'
 };
 
-module.exports = { ERROR, ROLES };
+const TOKEN = {
+    EXPIRING_TIME: '10h'
+};
+
+module.exports = { ERROR, ROLES, TOKEN };
