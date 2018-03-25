@@ -1,6 +1,5 @@
-const getWhereStatement = (id) => {
-    let whereStatement = {};
-    return id ? whereStatement = { id: [id] } : whereStatement = {};
+const getParams = (id) => {
+    return id ? { id: [id] } : {};
 };
 
-module.exports = { getWhereStatement };
+module.exports = { getParams };

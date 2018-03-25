@@ -28,13 +28,13 @@ module.exports = class BeersService {
                     raw: true,
                     nest: true,
                     group: ['id'],
-                    where: helpers.getWhereStatement(req.params.id)
+                    where: helpers.getParams(req.params.id)
                 })
                 .then((beers) => {
                     if(beers.length > 0) {
                         resolve(beers);
                     } else {
-                        reject(new Error('No beers found'))
+                        reject(new Error('No beers a found'))
                     }
                 })
                 .catch((e) => {
@@ -50,7 +50,7 @@ module.exports = class BeersService {
                     {
                         name: req.body.name,
                         brewer: req.body.brewer,
-                        style: req.body.style
+                      style: req.body.style
                     },
                     {
                         where: { id : req.params.id }

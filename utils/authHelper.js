@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const localConfig = require('../config/localConfig');
-const ERROR = require('../constants');
+const { ERROR } = require('../constants');
+
 
 const expiringTime = '10h';
 
