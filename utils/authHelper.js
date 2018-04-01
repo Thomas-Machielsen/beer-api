@@ -2,9 +2,13 @@ const jwt = require('jsonwebtoken');
 const localConfig = require('../config/localConfig');
 const { ERROR, TOKEN } = require('../constants');
 
-const returnToken = user => {
-    return new Promise((resolve, reject)=> {
-        user ? resolve(jwt.sign(user.get({plain: true}), localConfig.secret, {expiresIn: TOKEN.EXPIRING_TIME}))
+const returnToken = (user, jwtMock) => {
+    if (jwtMock) {
+        jwt.sign = jwtMock.sign;
+    }
+
+    return new Promise((resolve, reject) => {
+        user ? resolve(jwt.sign(user, localConfig.secret, {expiresIn: TOKEN.EXPIRING_TIME}))
             : reject({success: false, message: ERROR.LOGIN_FAILED});
     });
 };
