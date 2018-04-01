@@ -18,15 +18,16 @@ module.exports = new class UsersModel {
                         username: req.body.username,
                         password: req.body.password
                     },
+                    raw: true,
                     attributes: ['username', 'role']
                 })
-                .then((user) => authHelper.returnToken(user)
-                    .then((value) => resolve(value)))
-                    .catch((value) => reject(value));
+                .then((user) => authHelper.returnToken(user, null)
+                .then((value) => resolve(value)))
+                .catch((value) => reject(value));
         });
     }
 
-    authenticate(req, res, next, validations) {
+    authenticate(req, next, validations) {
         return new Promise((reject) => {
 
             const token = authHelper.findToken(req);
