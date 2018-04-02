@@ -6,14 +6,16 @@
   "author": "",
   "scripts": {
     "test": "jest",
-    "lint": "eslint *//*.js || exit 0",
+    "lint": "eslint . || exit 0",
+    "prettier-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "build": "node --harmony app.js",
     "env": "env",
+    "prettier": "prettier --write **\/*.{md,css,scss,js,json}",
     "prebuild": "npm run lint",
     "precommit": "eslint *//*.js",
     "watch:js": "onchange '**/**/*.js' -i -- npm run build",
-    "watch": "npm run watch:js",
-    "watch:test": "onchange '**/**/*.test.js' -i -- npm run test"
+    "watch": "npm run watch:js"
+
   },
   "license": "MIT",
   "dependencies": {
@@ -29,10 +31,10 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
-    "eslint": "^3.15.0",
-    "eslint-config-airbnb-base": "^11.1.0",
-    "eslint-plugin-import": "^2.2.0",
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
     "jest": "^21.2.1",
-    "onchange": "^3.2.1"
+    "onchange": "^3.2.1",
+    "prettier": "^1.11.1"
   }
 }

@@ -3,37 +3,53 @@
  */
 const jwt = require('jsonwebtoken');
 const localConfig = require('../../../config/localConfig');
-const { ERROR, ROLES } = require('../../../constants');
+const {ERROR, ROLES} = require('../../../constants');
 
 const isTokenDefined = token => {
-    const tokenAsString = token.toString();
-    return new Promise(resolve => {
-        tokenAsString ? resolve({ success: true }) : resolve({ success: false, message: ERROR.NO_TOKEN });
-    })
+  const tokenAsString = token.toString();
+  return new Promise(resolve => {
+    return tokenAsString ? resolve({success: true}) : resolve({
+      success: false,
+      message: ERROR.NO_TOKEN
+    });
+  })
 };
 
 const verifyToken = token => {
-    const tokenAsString = token.toString();
-    return new Promise(resolve => {
-        jwt.verify(tokenAsString, localConfig.secret, err => {
-            err ? resolve({ success: false, message: ERROR.FAILED }) : resolve({ success: true });
-        });
-    })
-};
-
-const authorizeToken = token => {
-    const tokenAsString = token.toString();
-    return new Promise(resolve => {
-        jwt.verify(tokenAsString, localConfig.secret, (err, decoded) => {
-            err ? resolve({ success: false, message: ERROR.FAILED }) : resolve(isAdmin(decoded.role));
-        });
-    })
+  const tokenAsString = token.toString();
+  return new Promise(resolve => {
+    jwt.verify(tokenAsString, localConfig.secret, err => {
+      return err ? resolve({
+        success: false,
+        message: ERROR.FAILED
+      }) : resolve({success: true});
+    });
+  })
 };
 
 const isAdmin = role => {
-    return new Promise(resolve => {
-        role === ROLES.ADMIN ? resolve({ success: true }) : resolve({ success: false, message: ERROR.NO_PERMISSION})
-    });
+  return new Promise(resolve => {
+    return role === ROLES.ADMIN ? resolve({success: true}) : resolve({
+      success: false,
+      message: ERROR.NO_PERMISSION
+    })
+  });
 };
 
-module.exports = { verifyToken, isTokenDefined, authorizeToken };
+const authorizeToken = token => {
+  const tokenAsString = token.toString();
+  return new Promise(resolve => {
+    jwt.verify(tokenAsString, localConfig.secret, (err, decoded) => {
+      return err ? resolve({
+        success: false,
+        message: ERROR.FAILED
+      }) : resolve(isAdmin(decoded.role));
+    });
+  })
+};
+
+module.exports = {
+  verifyToken,
+  isTokenDefined,
+  authorizeToken
+};

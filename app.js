@@ -6,7 +6,7 @@ const mysql         = require('mysql');
 const router        = require('./routes');
 const config        = require('./utils/config');
 
-const dbOptions     = config.config.dbOptions;
+const dbOptions     = config.config.dbOptions; //eslint-disable-line prefer-destructuring
 
 app.set('superSecret', config.config.secret);
 
@@ -20,4 +20,4 @@ app.use('/', router);
 
 const port = 3030;
 
-app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
+app.listen(port, () => console.log(`App listening at http://localhost:${port}`)); //eslint-disable-line no-console

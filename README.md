@@ -1,7 +1,8 @@
 # beer_api
-A beginning of an api containing beers 
 
-##Endpoints 
+A beginning of an api containing beers
+
+##Endpoints
 For all the beers
 /api/beers
 

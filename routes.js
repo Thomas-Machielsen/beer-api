@@ -1,5 +1,5 @@
-const Router    = require('express').Router;
-const router    = module.exports = Router();
+const { Router } = require('express');
+const router     = module.exports = Router();
 
 // Controllers
 const beerCtrl  = require('./controllers/beers');
