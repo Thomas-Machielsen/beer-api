@@ -7,6 +7,11 @@ const { STATUS_CODES } = require('../constants');
 
 const Beers = new BeersService(Sequelize, BeerSchema, RatingSchema);
 
+/**
+ * function getBeer
+ * @param {Object} req
+ * @param {Object} res
+ */
 function getBeer(req, res) {
   Beers.getBeer(req)
     .then(results => res.json({ data: results }))
@@ -16,6 +21,11 @@ function getBeer(req, res) {
     });
 }
 
+/**
+ * function editBeer
+ * @param {Object} req
+ * @param {Object} res
+ */
 function editBeer(req, res) {
   Beers.editBeer(req, res)
     .then(results => res.json(results))
@@ -25,6 +35,11 @@ function editBeer(req, res) {
     });
 }
 
+/**
+ * function deleteBeer
+ * @param {Object} req
+ * @param {Object} res
+ */
 function deleteBeer(req, res) {
   Beers.deleteBeer(req)
     .then(results => res.json(results))
@@ -34,6 +49,11 @@ function deleteBeer(req, res) {
     });
 }
 
+/**
+ * function addBeer
+ * @param {Object} req
+ * @param {Object} res
+ */
 function addBeer(req, res) {
   Beers.addBeer(req, res)
     .then(results => res.json(results))

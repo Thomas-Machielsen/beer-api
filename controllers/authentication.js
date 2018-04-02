@@ -1,14 +1,23 @@
 const AuthenticateModel = require("../services/authentication");
 const validations = require("../utils/validator/validations/validations");
 
-// Should these validations be in the controller?
-
+/**
+ * function getToken
+ * @param {Object} req
+ * @param {Object} res
+ */
 function getToken(req, res) {
   AuthenticateModel.getToken(req, res)
     .then(results => res.json({ data: results }))
     .catch(err => res.json({ error: err }));
 }
 
+/**
+ * function authenticate
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
 function authenticate(req, res, next) {
   AuthenticateModel.authenticate(req, next, [
     validations.isTokenDefined,
@@ -18,6 +27,12 @@ function authenticate(req, res, next) {
     .catch(err => res.json({ error: err }));
 }
 
+/**
+ * function getBeer
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
 function authorize(req, res, next) {
   AuthenticateModel.authenticate(req, next, [
     validations.isTokenDefined,

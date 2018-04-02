@@ -7,6 +7,10 @@ const Rating = dbConfig.db.define("Rating", {
   beerId: Sequelize.INTEGER
 });
 
+/**
+ * function assocations, couples Rating & Beer
+ * @param {Object} Beer - the Beer class
+ */
 function associations(Beer) {
   Rating.belongsTo(Beer);
 }

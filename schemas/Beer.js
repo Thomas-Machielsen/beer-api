@@ -9,6 +9,10 @@ const Beer = dbConfig.db.define("Beer", {
   desc: Sequelize.TEXT
 });
 
+/**
+ * function assocations, couples Rating & Beer
+ * @param {Object} Rating - the Rating class
+ */
 function associations(Rating) {
   Beer.hasMany(Rating);
 }

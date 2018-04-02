@@ -1,6 +1,11 @@
 const UsersModel = require("../services/users");
 const {STATUS_CODES} = require('../constants');
 
+/**
+ * function getUsers - get all the users from the database
+ * @param {Object} req
+ * @param {Object} res
+ */
 function getUsers(req, res) {
   UsersModel.getUsers(req, res)
     .then(results => res.json({ users: results }))
