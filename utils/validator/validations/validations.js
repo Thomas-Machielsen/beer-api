@@ -1,24 +1,21 @@
 /**
  * Validations
  */
-const jwt = require('jsonwebtoken');
 const localConfig = require('../../../config/localConfig');
 const {ERROR, ROLES} = require('../../../constants');
 
 const isTokenDefined = token => {
-  const tokenAsString = token.toString();
   return new Promise(resolve => {
-    return tokenAsString ? resolve({success: true}) : resolve({
+    return token ? resolve({success: true}) : resolve({
       success: false,
       message: ERROR.NO_TOKEN
     });
   })
 };
 
-const verifyToken = token => {
-  const tokenAsString = token.toString();
+const verifyToken = (token, jwt) => {
   return new Promise(resolve => {
-    jwt.verify(tokenAsString, localConfig.secret, err => {
+    jwt.verify(token, localConfig.secret, err => {
       return err ? resolve({
         success: false,
         message: ERROR.FAILED
@@ -36,10 +33,9 @@ const isAdmin = role => {
   });
 };
 
-const authorizeToken = token => {
-  const tokenAsString = token.toString();
+const authorizeToken = (token, jwt) => {
   return new Promise(resolve => {
-    jwt.verify(tokenAsString, localConfig.secret, (err, decoded) => {
+    jwt.verify(token, localConfig.secret, (err, decoded) => {
       return err ? resolve({
         success: false,
         message: ERROR.FAILED
