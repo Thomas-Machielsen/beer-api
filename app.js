@@ -16,7 +16,7 @@ app.use(myConnection(mysql, dbOptions, 'single'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/', router);
+app.use(router);
 
 const port = 3030;
 
