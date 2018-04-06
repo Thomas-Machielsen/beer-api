@@ -1,13 +1,16 @@
 const AuthenticateModel = require("../services/authentication");
 const validations = require("../utils/validator/validations/validations");
+const jwt = require('jsonwebtoken');
 
+
+// @todo de validaties moeten naar de service want dat is domeinspecifieke kennis
 /**
  * function getToken
  * @param {Object} req
  * @param {Object} res
  */
 function getToken(req, res) {
-  AuthenticateModel.getToken(req, res)
+  AuthenticateModel.getToken(req, res, jwt)
     .then(results => res.json({ data: results }))
     .catch(err => res.json({ error: err }));
 }
@@ -20,8 +23,8 @@ function getToken(req, res) {
  */
 function authenticate(req, res, next) {
   AuthenticateModel.authenticate(req, next, [
-    validations.isTokenDefined,
-    validations.verifyToken
+    { validation: validations.isTokenDefined },
+    { validation: validations.verifyToken, params: [jwt] }
   ])
     .then(results => res.json({ data: results }))
     .catch(err => res.json({ error: err }));
@@ -35,9 +38,9 @@ function authenticate(req, res, next) {
  */
 function authorize(req, res, next) {
   AuthenticateModel.authenticate(req, next, [
-    validations.isTokenDefined,
-    validations.verifyToken,
-    validations.authorizeToken
+    { validation: validations.isTokenDefined },
+    { validation: validations.verifyToken, params: [jwt] },
+    { validation: validations.authorizeToken, params: [jwt] }
   ])
     .then(results => res.json({ data: results }))
     .catch(err => res.json({ error: err }));

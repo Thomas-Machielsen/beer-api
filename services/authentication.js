@@ -9,7 +9,7 @@ const User = dbConfig.db.define("User", {
 });
 
 module.exports = new class UsersModel {
-  getToken(req) {
+  getToken(req, jwt) {
     return new Promise((resolve, reject) => {
       User.findOne({
         where: {
@@ -20,7 +20,7 @@ module.exports = new class UsersModel {
         attributes: ["username", "role"]
       })
         .then(user =>
-          authHelper.returnToken(user, null).then(value => resolve(value))
+          authHelper.returnToken(user, jwt).then(value => resolve(value))
         )
         .catch(value => reject(value));
     });
