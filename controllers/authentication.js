@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
  * @param {Object} res
  */
 function getToken(req, res) {
-  AuthenticateModel.getToken(req, res, jwt)
+  AuthenticateModel.getToken(req, jwt)
     .then(results => res.json({ data: results }))
     .catch(err => res.json({ error: err }));
 }

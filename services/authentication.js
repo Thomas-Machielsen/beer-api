@@ -19,9 +19,9 @@ module.exports = new class UsersModel {
         raw: true,
         attributes: ["username", "role"]
       })
-        .then(user =>
+        .then(user => {
           authHelper.returnToken(user, jwt).then(value => resolve(value))
-        )
+        })
         .catch(value => reject(value));
     });
   }
