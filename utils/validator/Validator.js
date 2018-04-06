@@ -25,8 +25,11 @@ const validate = (obj) => {
   // for each validation in the array with validations
   // call that validation with the data
   // push that promise in the array
-  obj.validations.forEach((validation) => {
-    validationPromisesArray.push(validation(obj.data));
+  obj.validations.forEach((validationAndParams) => {
+
+    const params = validationAndParams.params || [];
+
+    validationPromisesArray.push(validationAndParams.validation(obj.data, ...params));
   });
 
   // check whether all the validations in the array resolve to true
