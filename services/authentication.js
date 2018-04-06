@@ -2,6 +2,8 @@ const dbConfig = require("../config/db");
 const Sequelize = require("sequelize");
 const authHelper = require("../utils/authHelper");
 const Validator = require("../utils/validator/Validator");
+const validations = require("../utils/validator/validations/validations");
+const jwt = require('jsonwebtoken');
 
 const User = dbConfig.db.define("User", {
   username: Sequelize.STRING,
@@ -9,7 +11,7 @@ const User = dbConfig.db.define("User", {
 });
 
 module.exports = new class UsersModel {
-  getToken(req, jwt) {
+  getToken(req) {
     return new Promise((resolve, reject) => {
       User.findOne({
         where: {
@@ -26,12 +28,15 @@ module.exports = new class UsersModel {
     });
   }
 
-  authenticate(req, next, validations) {
+  authenticate(req, next) {
     return new Promise(reject => {
       const token = authHelper.findToken(req);
       const tokenWithValidations = authHelper.generateTokenToValidate(
         token,
-        validations
+        [
+          { validation: validations.isTokenDefined },
+          { validation: validations.verifyToken, params: [jwt] }
+        ]
       );
 
       Validator.validate(tokenWithValidations).then(value => {
