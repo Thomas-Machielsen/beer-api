@@ -63,7 +63,7 @@ describe("several authhelper functions", () => {
   describe("generateTokenToValidate", () => {
     test("it returns an object with data and an array of validations", () => {
       const mockData = {
-        data: ["reallyLongTokenString"],
+        data: "reallyLongTokenString",
         validations: []
       };
       const token = "reallyLongTokenString";
