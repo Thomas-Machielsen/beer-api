@@ -22,15 +22,17 @@ module.exports = new class UsersModel {
         attributes: ["username", "role"]
       })
         .then(user => {
-          authHelper.returnToken(user, jwt).then(value => resolve(value))
+          authHelper.returnToken(user, jwt)
+            .then(value => resolve(value))
+            .catch(value => reject(value))
         })
         .catch(value => reject(value));
     });
   }
 
-  authenticate(req, next) {
-    return new Promise(reject => {
+  isLoggedin(req) {
       const token = authHelper.findToken(req);
+
       const tokenWithValidations = authHelper.generateTokenToValidate(
         token,
         [
@@ -39,9 +41,29 @@ module.exports = new class UsersModel {
         ]
       );
 
+      return this.callValidator(tokenWithValidations);
+  }
+
+  //@todo find a way to pass token to this function rather than the whole req thing
+  isAdmin(req) {
+    const token = authHelper.findToken(req);
+
+    const tokenWithValidations = authHelper.generateTokenToValidate(
+        token,
+        [
+          { validation: validations.authorizeToken, params: [jwt] }
+        ]
+      );
+
+      return this.callValidator(tokenWithValidations);
+  }
+
+  callValidator(tokenWithValidations) {
+    return new Promise((resolve, reject) => {
       Validator.validate(tokenWithValidations).then(value => {
-        return value.success ? next() : reject(value);
+        return value.success ? resolve() : reject(value);
       });
     });
   }
+
 }();
