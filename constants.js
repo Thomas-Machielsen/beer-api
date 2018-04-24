@@ -2,7 +2,8 @@ const ERROR = {
   NO_TOKEN: 'No token provided.',
   FAILED:   'Failed to authenticate token.',
   LOGIN_FAILED: 'Failed authenticating.',
-  NO_PERMISSION: 'Insufficient permissions.'
+  NO_PERMISSION: 'Insufficient permissions.',
+  NO_BEERS: 'Sadly we did not find this beer'
 };
 
 const ROLES = {

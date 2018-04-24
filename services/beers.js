@@ -1,4 +1,5 @@
 const helpers = require("../utils/helpers");
+const { NO_BEERS } = require("../constants").ERROR;
 
 module.exports = class BeersService {
   constructor(Sequelize, BeerSchema, RatingSchema) {
@@ -35,7 +36,7 @@ module.exports = class BeersService {
           if (beers.length > 0) {
             resolve(beers);
           } else {
-            reject(new Error("No beers a found"));
+            reject(NO_BEERS);
           }
         })
         .catch(e => {

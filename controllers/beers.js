@@ -12,7 +12,7 @@ const getBeer = (req, res) => {
     .then(results => res.json({ data: results }))
     .catch(err => {
       res.status(STATUSCODES.NOT_FOUND);
-      res.json({ error: err });
+      res.json(err);
     });
 };
 
