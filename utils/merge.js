@@ -1,4 +1,4 @@
-function mergeObjectsDeep(target, ...sources) { // eslint-disable-line require-jsdoc
+const mergeObjectsDeep = (target, ...sources) => { // eslint-disable-line require-jsdoc
   for (let i = 0; i < sources.length; i++) {
     const source = sources[i];
     for (const prop in source) {
@@ -11,6 +11,6 @@ function mergeObjectsDeep(target, ...sources) { // eslint-disable-line require-j
     }
   }
   return target;
-}
+};
 
 module.exports = { mergeObjectsDeep };

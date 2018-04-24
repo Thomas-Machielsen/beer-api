@@ -4,6 +4,7 @@
  * @param {String} prop - string which is either option or message
  * @returns {Array} propArr - Array containing props
  */
+// @todo make this into map
 const getPropsFromObj = (arr, prop) => {
   const propArr = [];
   arr.forEach((object) => {
