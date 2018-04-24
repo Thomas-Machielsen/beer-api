@@ -12,7 +12,6 @@ const isLoggedin = (req, res, next) => {
     .catch(err => res.json({ error: err }));
 };
 
-
 const isAdmin = (req, res, next) => {
   AuthenticateModel.isAdmin(req, next)
     .then(() => next())
