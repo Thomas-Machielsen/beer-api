@@ -4,7 +4,6 @@ const RatingSchema = require("../schemas/Rating");
 const BeersService = require("../services/beers");
 const { STATUSCODES } = require('../constants');
 
-
 const Beers = new BeersService(Sequelize, BeerSchema, RatingSchema);
 
 const getBeer = (req, res) => {
