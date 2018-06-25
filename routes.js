@@ -2,11 +2,9 @@ const { Router } = require('express');
 const router     = module.exports = Router();
 
 // Controllers
-const beerCtrl  = require('./controllers/beers');
-const usersCtrl = require('./controllers/users');
-const authCtrl  = require('./controllers/authentication');
-
-// authCtrl.isLoggedin
+const beerCtrl  = require('./controllers/beersCtrl');
+const usersCtrl = require('./controllers/usersCtrl');
+const authCtrl  = require('./controllers/authenticationCtrl');
 
 // Route to login, get verified and get a token
 router.post('/api/authenticate', [authCtrl.getToken]);
