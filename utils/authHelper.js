@@ -1,9 +1,8 @@
-const localConfig = require("../config/localConfig");
 const {ERROR, TOKEN} = require("../constants");
 
 const returnToken = (user, jwt) => {
   return new Promise((resolve, reject) => {
-    return user ? resolve(jwt.sign(user, localConfig.secret, {expiresIn: TOKEN.EXPIRING_TIME})) : reject({
+    return user ? resolve(jwt.sign(user, process.env.SECRET, {expiresIn: TOKEN.EXPIRING_TIME})) : reject({
       success: false,
       message: ERROR.LOGIN_FAILED
     });

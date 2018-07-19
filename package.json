@@ -10,17 +10,17 @@
     "prettier-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "build": "node --harmony app.js",
     "env": "env",
-    "prettier": "prettier --write **\/*.{md,css,scss,js,json}",
+    "prettier": "prettier --write **/*.{md,css,scss,js,json}",
     "prebuild": "npm run lint",
     "precommit": "eslint *//*.js",
     "watch:js": "onchange '**/**/*.js' -i -- npm run build",
     "watch": "npm run watch:js"
-
   },
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^0.8.7",
     "body-parser": "^1.10.1",
+    "dotenv": "^6.0.0",
     "express": "^4.10.7",
     "express-myconnection": "^1.0.4",
     "express-session": "^1.10.1",

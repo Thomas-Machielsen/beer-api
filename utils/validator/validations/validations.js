@@ -1,7 +1,6 @@
 /**
  * Validations
  */
-const localConfig = require('../../../config/localConfig');
 const {ERROR, ROLES} = require('../../../constants');
 
 const isTokenDefined = token => {
@@ -15,7 +14,7 @@ const isTokenDefined = token => {
 
 const verifyToken = (token, jwt) => {
   return new Promise(resolve => {
-    jwt.verify(token, localConfig.secret, err => {
+    jwt.verify(token, process.env.SECRET, err => {
       return err ? resolve({
         success: false,
         message: ERROR.FAILED
@@ -35,7 +34,7 @@ const isAdmin = role => {
 
 const authorizeToken = (token, jwt) => {
   return new Promise(resolve => {
-    jwt.verify(token, localConfig.secret, (err, decoded) => {
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
       return err ? resolve({
         success: false,
         message: ERROR.FAILED

@@ -1,13 +1,11 @@
-const config = require("../utils/config");
-const dbOptions = config.config.dbOptions; //eslint-disable-line prefer-destructuring
-
 const Sequelize = require("sequelize");
+
 const db = new Sequelize(
-  dbOptions.database,
-  dbOptions.user,
-  dbOptions.password,
+  process.env.DATABASE_NAME,
+  process.env.DATABSE_USER,
+  process.env.DATABASE_PASSWORD,
   {
-    host: "localhost",
+    host: process.env.DATABASE_HOST,
     dialect: "mysql",
 
     pool: {

@@ -18,7 +18,7 @@ $ npm run watch
 ### Prerequisites
 
 You'll need a mysql database to connect with.
-In the config directory you'll need to add a configDefaults.json & localConfig.json where you have to add the config files to connect to the mysql database.
+
 
 
 
