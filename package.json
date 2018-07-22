@@ -5,7 +5,8 @@
   "main": "app.js",
   "author": "",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest",
+    "test-coverage": "jest --coverage",
     "lint": "eslint . || exit 0",
     "prettier-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "build": "node --harmony app.js",
@@ -14,7 +15,8 @@
     "prebuild": "npm run lint",
     "precommit": "eslint *//*.js",
     "watch:js": "onchange '**/**/*.js' -i -- npm run build",
-    "watch": "npm run watch:js"
+    "watch": "npm run watch:js",
+    "start": "node --harmony app.js"
   },
   "license": "MIT",
   "dependencies": {
