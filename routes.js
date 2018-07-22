@@ -6,6 +6,8 @@ const beerCtrl  = require('./controllers/beersCtrl');
 const usersCtrl = require('./controllers/usersCtrl');
 const authCtrl  = require('./controllers/authenticationCtrl');
 
+router.post('/api/register', [usersCtrl.addUser]);
+
 // Route to login, get verified and get a token
 router.post('/api/authenticate', [authCtrl.getToken]);
 

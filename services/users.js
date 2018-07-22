@@ -1,19 +1,46 @@
-const dbConfig = require("../config/db");
-const Sequelize = require("sequelize");
+const { UNDEFINED } = require('../constants').ERROR;
+const { REGISTERED } = require('../constants').SUCCESS;
 
-const User = dbConfig.db.define("User", {
-  username: Sequelize.STRING,
-  password: Sequelize.STRING
-});
+module.exports = class UsersModel {
+  constructor(Sequelize, UserSchema) {
+    this.Sequelize = Sequelize;
+    this.UserSchema = UserSchema;
+  }
 
-module.exports = new class UsersModel {
   getUsers() {
     return new Promise((resolve, reject) => {
-      User.findAll({
-        attributes: ["username", "role"]
+      this.UserSchema.User.findAll({
+        attributes: ["username", "role"],
       })
         .then(users => resolve(users))
         .catch(reject);
     });
   }
-}();
+
+  addUser(req) {
+    const { username } = req.body;
+    const { password } = req.body;
+
+    return new Promise((resolve, reject) => {
+      // @todo this is a validation
+      if (username === "" || password === "") {
+        reject({
+          success: false,
+          message: UNDEFINED
+        });
+      }
+
+      this.UserSchema.User.create({
+        username,
+        password
+      }).then(() => {
+        resolve({
+          "success": true,
+          "message": REGISTERED
+        })
+      }).catch(err => {
+        reject(err);
+      })
+    });
+  }
+};

@@ -1,8 +1,12 @@
-const UsersModel = require("../services/users");
+const Sequelize = require("sequelize");
+const UsersService = require("../services/users");
+const UserSchema = require('../schemas/User');
 const { STATUSCODES } = require('../constants');
 
+const Users = new UsersService(Sequelize, UserSchema);
+
 const getUsers = (req, res) => {
-  UsersModel.getUsers(req, res)
+  Users.getUsers(req, res)
     .then(results => res.json({ users: results }))
     .catch(err => {
       res.status(STATUSCODES.NOT_FOUND);
@@ -10,4 +14,12 @@ const getUsers = (req, res) => {
     });
 };
 
-module.exports = { getUsers };
+const addUser = (req, res) => {
+  Users.addUser(req, res)
+    .then(results => res.json(results))
+    .catch(err => {
+      res.json(err);
+    });
+};
+
+module.exports = { getUsers, addUser };
