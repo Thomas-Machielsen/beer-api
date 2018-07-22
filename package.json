@@ -5,7 +5,8 @@
   "main": "app.js",
   "author": "",
   "scripts": {
-    "test": "jest --coverage",
+    "test-coverage": "jest --coverage",
+    "test": "jest",
     "lint": "eslint . || exit 0",
     "prettier-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "build": "node --harmony app.js",
