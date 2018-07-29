@@ -3,7 +3,11 @@ const Sequelize = require("sequelize");
 const authHelper = require("../utils/authHelper");
 const Validator = require("../utils/validator/Validator");
 const validations = require("../utils/validator/validations/validations");
+const { buildHashPassword } = require('../utils/helpers');
 const jwt = require('jsonwebtoken');
+const { isPasswordCorrect } = require('../libs/hashPassword/salt-hash-password');
+const { LOGIN_FAILED } = require("../constants").ERROR;
+const { DB_DOWN } = require("../constants").STATUSCODES;
 
 const User = dbConfig.db.define("User", {
   username: Sequelize.STRING,
@@ -12,21 +16,32 @@ const User = dbConfig.db.define("User", {
 
 module.exports = new class UsersModel {
   getToken(req) {
+    const iterations = parseInt(process.env.HASH_ITERATIONS, 10);
+    const keylen = parseInt(process.env.HASH_KEYLEN, 10);
+    const digest = process.env.HASH_DIGEST;
+    const splitString = process.env.SPLIT_STRING;
+
     return new Promise((resolve, reject) => {
       User.findOne({
         where: {
-          username: req.body.username,
-          password: req.body.password
+          username: req.body.username
         },
         raw: true,
-        attributes: ["username", "role"]
+        attributes: ["username", "role", "password"]
       })
         .then(user => {
-          authHelper.returnToken(user, jwt)
-            .then(value => resolve(value))
-            .catch(value => reject(value))
+          const passwordToCheck = buildHashPassword(user.password, splitString, iterations, keylen, digest);
+
+          isPasswordCorrect(passwordToCheck, req.body.password)
+            .then(passwordIsCorrect => {
+              if (!passwordIsCorrect) { reject(LOGIN_FAILED) }
+
+              authHelper.returnToken(user, jwt)
+                .then(value => resolve(value))
+                .catch(value => reject(value))
+            });
         })
-        .catch(value => reject(value));
+        .catch(() => reject(DB_DOWN));
     });
   }
 

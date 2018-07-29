@@ -1,4 +1,4 @@
-const { UNDEFINED } = require('../constants').ERROR;
+const { UNDEFINED, ERR } = require('../constants').ERROR;
 const { REGISTERED } = require('../constants').SUCCESS;
 
 module.exports = class UsersModel {
@@ -33,13 +33,17 @@ module.exports = class UsersModel {
       this.UserSchema.User.create({
         username,
         password
-      }).then(() => {
-        resolve({
-          "success": true,
-          "message": REGISTERED
+      }, {
+        individualHooks: true
+      })
+        .then(() => {
+          resolve({
+            "success": true,
+            "message": REGISTERED
+          })
         })
-      }).catch(err => {
-        reject(err);
+        .catch(err => {
+          reject(ERR, err);
       })
     });
   }
