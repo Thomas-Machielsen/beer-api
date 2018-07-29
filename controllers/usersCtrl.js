@@ -18,7 +18,7 @@ const addUser = (req, res) => {
   Users.addUser(req, res)
     .then(results => res.json(results))
     .catch(err => {
-      res.json(err);
+      res.json({ error: err });
     });
 };
 
