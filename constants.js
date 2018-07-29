@@ -4,7 +4,12 @@ const ERROR = {
   LOGIN_FAILED: 'Failed authenticating.',
   NO_PERMISSION: 'Insufficient permissions.',
   NO_BEERS: 'Sadly we did not find this beer',
-  ERR: 'Something went wrong, the api is probably down'
+  ERR: 'Something went wrong, the api is probably down',
+  UNDEFINED: 'Name or password should not be empty'
+};
+
+const SUCCESS = {
+  REGISTERED: 'Successfully registered, you may use your credentials to log in now!'
 };
 
 const ROLES = {
@@ -17,7 +22,8 @@ const TOKEN = {
 };
 
 const STATUSCODES = {
-  NOT_FOUND: '404'
+  NOT_FOUND: '404',
+  DB_DOWN: '503'
 };
 
-module.exports = { ERROR, ROLES, TOKEN, STATUSCODES };
+module.exports = { ERROR, ROLES, TOKEN, STATUSCODES, SUCCESS };
