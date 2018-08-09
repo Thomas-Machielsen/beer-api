@@ -5,8 +5,8 @@
   "main": "app.js",
   "author": "",
   "scripts": {
-    "test": "jest",
     "test-coverage": "jest --coverage",
+    "test": "jest",
     "lint": "eslint . || exit 0",
     "prettier-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "build": "node --harmony app.js",
@@ -29,7 +29,7 @@
     "jsonwebtoken": "^7.2.1",
     "multer": "^0.1.6",
     "mysql": "^2.13.0",
-    "sequelize": "^3.30.2"
+    "sequelize": "^3.33.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
