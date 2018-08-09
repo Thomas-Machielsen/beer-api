@@ -15,7 +15,8 @@
     "prebuild": "npm run lint",
     "precommit": "eslint *//*.js",
     "watch:js": "onchange '**/**/*.js' -i -- npm run build",
-    "watch": "npm run watch:js"
+    "watch": "npm run watch:js",
+    "start": "node --harmony app.js"
   },
   "license": "MIT",
   "dependencies": {
