@@ -1,10 +1,23 @@
 const { Router } = require('express');
 const router     = module.exports = Router();
+const { SUCCESS } = require('./constants').STATUSCODES;
 
 // Controllers
 const beerCtrl  = require('./controllers/beersCtrl');
 const usersCtrl = require('./controllers/usersCtrl');
 const authCtrl  = require('./controllers/authenticationCtrl');
+
+router.all('/*', (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", process.env.ALLOWEDCORS);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  // Set custom headers for CORS
+  res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
+  if (req.method === 'OPTIONS') {
+    return res.status(SUCCESS).end();
+  }
+
+  return next();
+});
 
 router.post('/api/register', [usersCtrl.addUser]);
 

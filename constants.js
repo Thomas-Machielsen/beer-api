@@ -22,8 +22,9 @@ const TOKEN = {
 };
 
 const STATUSCODES = {
-  NOT_FOUND: '404',
-  DB_DOWN: '503'
+  SUCCESS: 200,
+  NOT_FOUND: 404,
+  DB_DOWN: 503
 };
 
 module.exports = { ERROR, ROLES, TOKEN, STATUSCODES, SUCCESS };
