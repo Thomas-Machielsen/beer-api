@@ -34,7 +34,10 @@ module.exports = class BeersService {
       })
         .then(beers => {
           if (beers.length > 0) {
-            resolve(beers);
+            resolve({
+              success: true,
+              beers
+            });
           } else {
             reject(NO_BEERS);
           }
