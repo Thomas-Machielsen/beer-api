@@ -13,7 +13,7 @@ const findToken = req => {
   return (
     req.body.token ||
     req.query.token ||
-    req.headers["xaccess-token"] ||
+    req.headers["x-access-token"] ||
     req.headers.authorization
   );
 };
