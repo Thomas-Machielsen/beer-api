@@ -11,7 +11,7 @@ router.all('/*', (req, res, next) => {
   res.header("Access-Control-Allow-Origin", process.env.ALLOWEDCORS);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   // Set custom headers for CORS
-  res.header('Access-Control-Allow-Headers', process.env.ALLOWEDHEADERS, process.env.ALLOWEDHEADERS2);
+  res.header('Access-Control-Allow-Headers', `${process.env.ALLOWEDHEADERS}, ${process.env.ALLOWEDHEADERS2}`);
   if (req.method === 'OPTIONS') {
     return res.status(SUCCESS).end();
   }
