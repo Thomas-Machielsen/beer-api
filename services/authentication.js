@@ -34,7 +34,7 @@ module.exports = new class UsersModel {
 
           isPasswordCorrect(passwordToCheck, req.body.password)
             .then(passwordIsCorrect => {
-              if (!passwordIsCorrect) { reject(LOGIN_FAILED) }
+              if (!passwordIsCorrect) { reject({ success: false, message: LOGIN_FAILED }) }
 
               authHelper.returnToken(user, jwt)
                 .then(value => resolve(value))
