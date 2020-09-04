@@ -29,7 +29,7 @@
     "jsonwebtoken": "^7.2.1",
     "multer": "^0.1.6",
     "mysql": "^2.13.0",
-    "sequelize": "^3.33.0"
+    "sequelize": "^6.3.5"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
